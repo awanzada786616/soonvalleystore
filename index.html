@@ -669,81 +669,138 @@
             renderProducts(res);
         };
     </script>
-    ‎<!-- WhatsApp Premium Widget Start -->
-‎<style>
-‎    /* Floating Button */
-‎    .wa-float-btn {
-‎        position: fixed; bottom: 20px; right: 20px;
-‎        background-color: #16BE45; color: white;
-‎        padding: 12px 25px; border-radius: 50px;
-‎        display: flex; align-items: center; gap: 10px;
-‎        text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif;
-‎        font-weight: 700; font-size: 14px; z-index: 999999;
-‎        box-shadow: 0 10px 25px rgba(22, 190, 69, 0.4);
-‎        cursor: pointer; transition: 0.3s; border: none;
-‎    }
-‎    .wa-float-btn:hover { transform: translateY(-5px); color: white; box-shadow: 0 15px 30px rgba(22, 190, 69, 0.5); }
-‎    .wa-float-btn i { font-size: 22px; }
-‎
-‎    /* Chat Window */
-‎    .wa-card {
-‎        position: fixed; bottom: 85px; right: 20px;
-‎        width: 320px; background: white; border-radius: 20px;
-‎        overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-‎        z-index: 999999; display: none; flex-direction: column;
-‎        animation: wa-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-‎    }
-‎    @keyframes wa-pop { from { opacity: 0; transform: translateY(50px) scale(0.8); } to { opacity: 1; transform: translateY(0) scale(1); } }
-‎
-‎    .wa-header { background: #0061ff; padding: 20px; color: white; position: relative; }
-‎    .wa-header h6 { margin: 0; font-weight: 700; font-size: 16px; }
-‎    .wa-header p { margin: 0; font-size: 12px; opacity: 0.8; }
-‎    .wa-close { position: absolute; top: 15px; right: 15px; color: white; cursor: pointer; opacity: 0.7; }
-‎
-‎    .wa-body { padding: 20px; background: #f0f2f5; }
-‎    .wa-msg { background: white; padding: 12px 15px; border-radius: 0 15px 15px 15px; font-size: 13px; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 85%; }
-‎
-‎    .wa-footer { padding: 15px 20px; background: white; }
-‎    .wa-btn-send {
-‎        background: #1A1A1A; color: white; border: none; width: 100%;
-‎        padding: 10px; border-radius: 10px; font-weight: 700; font-size: 14px;
-‎        display: flex; align-items: center; justify-content: center; gap: 8px;
-‎        text-decoration: none; transition: 0.3s;
-‎    }
-‎    .wa-btn-send:hover { background: #333; color: white; }
-‎</style>
-‎
-‎<!-- Widget HTML -->
-‎<div class="wa-card" id="waCard">
-‎    <div class="wa-header">
-‎        <div class="wa-close" onclick="toggleWa()"><i class="fa-solid fa-xmark"></i></div>
-‎        <h6>best store</h6>
-‎        <p>Typically replies in minutes</p>
-‎    </div>
-‎    <div class="wa-body">
-‎        <div class="wa-msg">Hi there! How can we help you with </div>
-‎    </div>
-‎    <div class="wa-footer">
-‎        <a href="https://wa.me/923344845224?text=Hello%20sir%20help%20me" target="_blank" class="wa-btn-send">
-‎            <i class="fa-brands fa-whatsapp"></i> Start Chat
-‎        </a>
-‎    </div>
-‎</div>
-‎
-‎<button class="wa-float-btn" onclick="toggleWa()">
-‎    <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
-‎</button>
-‎
-‎<script>
-‎    function toggleWa() {
-‎        var card = document.getElementById('waCard');
-‎        if (card.style.display === 'flex') {
-‎            card.style.display = 'none';
-‎        } else {
-‎            card.style.display = 'flex';
-‎        }
-‎    }
-‎</script>
-‎<!-- WhatsApp Premium Widget End -->
+    <!-- WhatsApp Premium Widget for BEST STORE -->
+<style>
+    /* Floating Button */
+    .wa-float-btn {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #16BE45;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        z-index: 999999;
+        box-shadow: 0 10px 25px rgba(22, 190, 69, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    .wa-float-btn:hover {
+        transform: translateY(-5px);
+        color: white;
+        box-shadow: 0 15px 30px rgba(22, 190, 69, 0.5);
+    }
+    .wa-float-btn i { font-size: 22px; animation: wa-bounce 2s infinite; }
+
+    @keyframes wa-bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    /* Chat Window Card */
+    .wa-card {
+        position: fixed;
+        bottom: 90px;
+        right: 25px;
+        width: 320px;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        z-index: 999999;
+        display: none;
+        flex-direction: column;
+        animation: wa-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes wa-pop {
+        from { opacity: 0; transform: translateY(50px) scale(0.8); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .wa-header { background: #0061ff; padding: 20px; color: white; position: relative; }
+    .wa-header h6 { margin: 0; font-weight: 800; font-size: 16px; letter-spacing: 0.5px; }
+    .wa-header p { margin: 0; font-size: 12px; opacity: 0.8; }
+    .wa-close { position: absolute; top: 15px; right: 15px; color: white; cursor: pointer; opacity: 0.7; font-size: 18px; }
+
+    .wa-body { padding: 20px; background: #f0f2f5; }
+    .wa-msg { 
+        background: white; 
+        padding: 12px 15px; 
+        border-radius: 0 15px 15px 15px; 
+        font-size: 13px; 
+        color: #333; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        max-width: 90%; 
+        line-height: 1.5;
+    }
+
+    .wa-footer { padding: 15px 20px; background: white; }
+    .wa-btn-send {
+        background: #1A1A1A;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .wa-btn-send:hover { background: #333; color: white; }
+
+    @media (max-width: 768px) {
+        .wa-float-btn { padding: 10px 18px; font-size: 13px; bottom: 15px; right: 15px; }
+        .wa-card { width: 280px; bottom: 75px; right: 15px; }
+    }
+</style>
+
+<!-- Widget HTML -->
+<div class="wa-card" id="waChatBox">
+    <div class="wa-header">
+        <div class="wa-close" onclick="toggleWaChat()"><i class="fa-solid fa-xmark"></i></div>
+        <h6>Best Store Support</h6>
+        <p>Online | Typically replies in minutes</p>
+    </div>
+    <div class="wa-body">
+        <div class="wa-msg">
+            Hello! 👋 <br>
+            Welcome to <b>BEST STORE</b>. How can we help you with your order?
+        </div>
+    </div>
+    <div class="wa-footer">
+        <a href="https://wa.me/923344845224?text=Hello%20Best%20Store%20Support%2C%20I%20need%20help." target="_blank" class="wa-btn-send">
+            <i class="fa-brands fa-whatsapp"></i> Start Live Chat
+        </a>
+    </div>
+</div>
+
+<button class="wa-float-btn" onclick="toggleWaChat()">
+    <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
+</button>
+
+<script>
+    function toggleWaChat() {
+        var chatBox = document.getElementById('waChatBox');
+        if (chatBox.style.display === 'flex') {
+            chatBox.style.display = 'none';
+        } else {
+            chatBox.style.display = 'flex';
+        }
+    }
+</script>
+<!-- WhatsApp Premium Widget End -->
 </body>
 </html>

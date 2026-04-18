@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KingStore Admin | Enterprise Intelligence</title>
+    
+    <!-- Premium Assets -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --sidebar-bg: #0f172a;
+            --bg-main: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: #1e293b; overflow-x: hidden; }
+
+        /* --- STYLISH TOAST NOTIFICATION --- */
+        .toast-container { position: fixed; top: 25px; right: 25px; z-index: 9999; }
+        .king-toast {
+            background: white; border-radius: 16px; padding: 16px 25px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); display: flex; align-items: center;
+            gap: 12px; border-left: 6px solid var(--primary); margin-bottom: 10px;
+            animation: slideInRight 0.5s ease;
+        }
+
+        /* --- AUTH SCREEN --- */
+        #admin-lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            z-index: 9000; display: flex; align-items: center; justify-content: center;
+        }
+        .auth-card {
+            width: 100%; max-width: 420px; background: white; border-radius: 35px;
+            padding: 50px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); text-align: center;
+        }
+        .lock-icon-anim { font-size: 5rem; color: var(--primary); margin-bottom: 30px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px; height: 100vh; background: var(--sidebar-bg);
+            position: fixed; left: 0; top: 0; z-index: 1050; transition: var(--transition);
+        }
+        .sidebar-brand { padding: 40px 30px; border-bottom: 1px solid rgba(255,255,255,0.05); color: white; font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+        .sidebar-brand span { color: var(--primary); }
+
+        .nav-link {
+            color: #94a3b8; padding: 16px 30px; display: flex; align-items: center; gap: 15px;
+            text-decoration: none; border-left: 4px solid transparent; transition: 0.3s; cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active { background: rgba(255,255,255,0.05); color: white; border-left-color: var(--primary); }
+        .nav-link i { font-size: 1.2rem; width: 25px; color: var(--primary); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { margin-left: 280px; padding: 35px; transition: var(--transition); }
+        .top-navbar {
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            padding: 15px 35px; border-radius: 25px; border: 1px solid white;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 40px; box-shadow: var(--shadow);
+        }
+
+        /* Stats & Cards */
+        .stat-card {
+            background: white; border-radius: 30px; padding: 30px; border: 1px solid white;
+            box-shadow: var(--shadow); transition: 0.3s; height: 100%;
+        }
+        .stat-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.05); }
+        .icon-box {
+            width: 60px; height: 60px; border-radius: 20px; display: flex;
+            align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px;
+        }
+
+        /* Tables */
+        .glass-box { background: white; border-radius: 30px; padding: 30px; border: 1px solid white; box-shadow: var(--shadow); }
+        .table thead th { background: #f8fafc; border: none; padding: 18px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+        .table tbody td { padding: 22px 18px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .p-img-table { width: 50px; height: 50px; border-radius: 15px; object-fit: cover; }
+
+        /* Animation Classes */
+        .admin-section { display: none; }
+        .section-active { display: block !important; animation: slideUp 0.6s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .back-nav-btn {
+            display: inline-flex; align-items: center; gap: 10px; color: var(--primary);
+            cursor: pointer; font-weight: 800; margin-bottom: 25px; transition: 0.3s;
+            background: white; padding: 10px 20px; border-radius: 15px; box-shadow: var(--shadow);
+        }
+        .back-nav-btn:hover { background: var(--primary); color: white; transform: translateX(-5px); }
+
+        /* Banner Design */
+        .banner-card { border-radius: 25px; overflow: hidden; position: relative; border: 4px solid white; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .banner-card img { width: 100%; height: 180px; object-fit: cover; }
+        .btn-del-banner { position: absolute; top: 12px; right: 12px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; }
+
+        @media (max-width: 991px) {
+            .sidebar { left: -280px; }
+            .sidebar.show { left: 0; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toast-container" id="toast-root"></div>
+
+    <!-- 1. LOCK SCREEN -->
+    <div id="admin-lock-screen">
+        <div class="auth-card animate__animated animate__zoomIn">
+            <div class="lock-icon-anim">
+                <i class="fa-solid fa-lock-open fa-bounce"></i>
+            </div>
+            <h3 class="fw-800 mb-2">Access Portal</h3>
+            <p class="text-muted small mb-4">Master authorization required</p>
+            <input type="email" id="auth-email" class="form-control mb-3 p-3 rounded-4 shadow-sm" placeholder="Admin Email">
+            <input type="password" id="auth-pass" class="form-control mb-4 p-3 rounded-4 shadow-sm" placeholder="Password">
+            <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-lg" onclick="loginAdmin()">Verify & Unlock</button>
+        </div>
+    </div>
+
+    <!-- 2. MAIN DASHBOARD UI -->
+    <div id="admin-main-ui" style="display: none;">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">BEST<span>STORE</span></div>
+            <nav class="mt-4">
+                <a onclick="showSec('dashboard')" class="nav-link active" id="btn-dashboard"><i class="fa-solid fa-chart-line fa-beat-low"></i> Dashboard</a>
+                <a onclick="showSec('orders')" class="nav-link" id="btn-orders"><i class="fa-solid fa-receipt fa-fade"></i> Orders Tracking</a>
+                <a onclick="showSec('inventory')" class="nav-link" id="btn-inventory"><i class="fa-solid fa-boxes-packing fa-shake"></i> Inventory</a>
+                <a onclick="showSec('banners')" class="nav-link" id="btn-banners"><i class="fa-solid fa-images fa-pulse"></i> Promo Banners</a>
+                <a onclick="showSec('settings')" class="nav-link" id="btn-settings"><i class="fa-solid fa-screwdriver-wrench fa-spin-hover"></i> Site Settings</a>
+                <div class="px-4 mt-5"><button class="btn btn-outline-danger w-100 rounded-pill fw-bold" onclick="logoutAdmin()">Sign Out</button></div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <!-- Top Nav -->
+            <header class="top-navbar">
+                <div class="d-flex align-items-center">
+                    <button class="btn d-lg-none me-3" onclick="document.getElementById('sidebar').classList.toggle('show')"><i class="fa-solid fa-bars-staggered"></i></button>
+                    <h5 class="fw-800 m-0 text-uppercase" id="title-text">Dashboard</h5>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-primary-subtle text-primary p-2 px-3 rounded-pill fw-bold" style="font-size: 10px;">• ONLINE SYNC</span>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" class="rounded-circle border" width="45">
+                </div>
+            </header>
+
+            <!-- DASHBOARD SECTION -->
+            <div id="sec-dashboard" class="admin-section section-active">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="icon-box bg-success-subtle text-success"><i class="fa-solid fa-wallet"></i></div>
+                            <p class="text-muted small fw-bold">TOTAL REVENUE</p>
+                            <h2 class="fw-800 m-0" id="dash-rev">Rs. 0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="icon-box bg-primary-subtle text-primary"><i class="fa-solid fa-cart-shopping"></i></div>
+                            <p class="text-muted small fw-bold">ALL ORDERS</p>
+                            <h2 class="fw-800 m-0" id="dash-ord">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="icon-box bg-warning-subtle text-warning"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                            <p class="text-muted small fw-bold">PENDING</p>
+                            <h2 class="fw-800 m-0" id="dash-pend">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="icon-box bg-info-subtle text-info"><i class="fa-solid fa-users-viewfinder"></i></div>
+                            <p class="text-muted small fw-bold">CLIENT BASE</p>
+                            <h2 class="fw-800 m-0" id="dash-user">0</h2>
+                        </div>
+                    </div>
+                </div>
+                <!-- CHART -->
+                <div class="glass-box">
+                    <h6 class="fw-bold mb-4"><i class="fa-solid fa-chart-area me-2"></i>Business Performance Analysis</h6>
+                    <div style="height: 350px;"><canvas id="analysisChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- ORDERS SECTION -->
+            <div id="sec-orders" class="admin-section">
+                <div class="back-nav-btn" onclick="showSec('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+                <div class="glass-box table-responsive">
+                    <table class="table align-middle">
+                        <thead><tr><th>ID</th><th>Items</th><th>Customer</th><th>Location</th><th>Total</th><th>Status</th></tr></thead>
+                        <tbody id="order-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- INVENTORY SECTION -->
+            <div id="sec-inventory" class="admin-section">
+                <div class="back-nav-btn" onclick="showSec('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold m-0">Stock Inventory</h4>
+                    <button class="btn btn-primary rounded-pill px-4 fw-bold shadow" onclick="showSec('add-product')"><i class="fa-solid fa-plus me-2"></i>Add Product</button>
+                </div>
+                <div class="glass-box table-responsive">
+                    <table class="table align-middle">
+                        <thead><tr><th>Img</th><th>Title</th><th>Price</th><th>Category</th><th>Action</th></tr></thead>
+                        <tbody id="product-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DEDICATED ADD PRODUCT PAGE -->
+            <div id="sec-add-product" class="admin-section">
+                <div class="back-nav-btn" onclick="showSec('inventory')"><i class="fa-solid fa-arrow-left"></i> Back to Inventory</div>
+                <div class="glass-box mx-auto" style="max-width: 800px;">
+                    <h4 class="fw-bold mb-4 text-center">Publish New Listing</h4>
+                    <form id="pForm">
+                        <div class="mb-3"><label class="small fw-bold">Product Title</label><input type="text" id="p-t" class="form-control p-3 rounded-4" required></div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6"><label class="small fw-bold">Category</label><select id="p-c" class="form-select p-3 rounded-4"><option>Mobiles</option><option>Electronics</option><option>Fashion</option><option>Home</option></select></div>
+                            <div class="col-6"><label class="small fw-bold">Price (PKR)</label><input type="number" id="p-p" class="form-control p-3 rounded-4" required></div>
+                        </div>
+                        <div class="mb-3"><label class="small fw-bold">Badge Type</label><select id="p-b" class="form-select p-3 rounded-4"><option value="">No Badge</option><option value="Featured">Featured Sale</option><option value="Flat">Flat Sale</option><option value="Hot">Hot Item</option></select></div>
+                        <div class="mb-4"><label class="small fw-bold">Image URL</label><input type="url" id="p-i" class="form-control p-3 rounded-4" required></div>
+                        <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">Publish to Live Store</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- BANNERS SECTION -->
+            <div id="sec-banners" class="admin-section">
+                <div class="back-nav-btn" onclick="showSec('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+                <div class="stat-card mb-4">
+                    <h5 class="fw-bold mb-3">Add New Poster</h5>
+                    <div class="row g-3">
+                        <div class="col-md-5"><input type="url" id="b-url" class="form-control p-2" placeholder="Image URL"></div>
+                        <div class="col-md-5"><input type="text" id="b-txt" class="form-control p-2" placeholder="Overlay Text"></div>
+                        <div class="col-md-2"><button class="btn btn-dark w-100 rounded-pill p-2" onclick="addBanner()">Add</button></div>
+                    </div>
+                </div>
+                <div id="banner-list-ui" class="row"></div>
+            </div>
+
+            <!-- SETTINGS SECTION -->
+            <div id="sec-settings" class="admin-section">
+                <div class="back-nav-btn" onclick="showSec('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="glass-box h-100">
+                            <h5 class="fw-bold mb-4">Identity & Brand</h5>
+                            <label class="small fw-bold">Store Name</label><input type="text" id="s-name" class="form-control mb-3">
+                            <label class="small fw-bold">Logo Link (PNG)</label><input type="text" id="s-logo" class="form-control mb-3">
+                            <label class="small fw-bold">WhatsApp No.</label><input type="text" id="s-wa" class="form-control mb-3">
+                            <label class="small fw-bold">Currency Symbol</label><input type="text" id="s-cur" class="form-control mb-4">
+                            <button class="btn btn-success w-100 py-3 rounded-4 fw-bold" onclick="saveSettings()">Apply Site Config</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="glass-box h-100">
+                            <h5 class="fw-bold mb-4">External Connections</h5>
+                            <label class="small fw-bold">Facebook Link</label><input type="text" id="s-fb" class="form-control mb-3">
+                            <label class="small fw-bold">Instagram Link</label><input type="text" id="s-ig" class="form-control mb-3">
+                            <label class="small fw-bold">EasyPaisa No.</label><input type="text" id="s-ep" class="form-control mb-3">
+                            <label class="small fw-bold">JazzCash No.</label><input type="text" id="s-jc" class="form-control mb-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0hUkox8iDVFXPsI0Rd4Ep4B-5uAjRXMI",
+            authDomain: "king-c2456.firebaseapp.com",
+            databaseURL: "https://king-c2456-default-rtdb.firebaseio.com",
+            projectId: "king-c2456",
+            storageBucket: "king-c2456.firebasestorage.app",
+            messagingSenderId: "946581270259",
+            appId: "1:946581270259:web:3184da55b7e04f76a21186"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // --- SECURITY UID ---
+        const ADMIN_UID = "7WUBCfItRdfiXKjg3kv2OZlZdW22";
+
+        // Toast Engine
+        window.kingToast = (msg, icon = 'check-circle') => {
+            const t = document.createElement('div');
+            t.className = 'king-toast';
+            t.innerHTML = `<i class="fa-solid fa-${icon} text-primary fs-5"></i> <b>${msg}</b>`;
+            document.getElementById('toast-root').appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 3000);
+        };
+
+        // Auth Logic
+        window.loginAdmin = () => {
+            const e = document.getElementById('auth-email').value, p = document.getElementById('auth-pass').value;
+            signInWithEmailAndPassword(auth, e, p).catch(err => kingToast("Wrong Credentials!", "circle-exclamation"));
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if(user && user.uid === ADMIN_UID) {
+                document.getElementById('admin-lock-screen').style.display = 'none';
+                document.getElementById('admin-main-ui').style.display = 'block';
+                kingToast("Welcome Back, Master!", "shield-check");
+                loadAdminData();
+            } else {
+                if(user) signOut(auth);
+                document.getElementById('admin-lock-screen').style.display = 'flex';
+                document.getElementById('admin-main-ui').style.display = 'none';
+            }
+        });
+
+        window.logoutAdmin = () => signOut(auth);
+
+        // Panel Switching
+        window.showSec = (id) => {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('section-active'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(`sec-${id}`).classList.add('section-active');
+            if(id !== 'add-product') {
+                const navBtn = document.getElementById(`btn-${id}`);
+                if(navBtn) navBtn.classList.add('active');
+            }
+            document.getElementById('title-text').innerText = id;
+            if(window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
+            window.scrollTo(0,0);
+        };
+
+        // --- DATABASE OPS ---
+        function loadAdminData() {
+            // Orders
+            onValue(ref(db, 'orders'), (snap) => {
+                const tbody = document.getElementById('order-tbody'); tbody.innerHTML = '';
+                let rev = 0, ords = 0, pends = 0;
+                let cStats = { Pending: 0, Shipped: 0, EnRoute: 0, Delivered: 0 };
+                if(snap.exists()){
+                    const data = Object.entries(snap.val()).reverse();
+                    data.forEach(([id, o]) => {
+                        ords++;
+                        if(o.status === 'Pending') pends++;
+                        if(o.status === 'Delivered') rev += parseFloat(o.total.replace(/[^0-9.]/g, '')) || 0;
+                        if(cStats[o.status] !== undefined) cStats[o.status]++;
+
+                        let itmList = '';
+                        if(o.items) o.items.forEach(i => itmList += `<span class="badge bg-light text-dark border me-1 small">${i.title}</span>`);
+                        
+                        tbody.innerHTML += `<tr>
+                            <td><b>#${o.orderId || '000'}</b></td><td>${itmList}</td>
+                            <td><b>${o.name || 'Anonymous'}</b><br><a href="https://wa.me/${o.whatsapp}" class="small text-success fw-bold">WhatsApp</a></td>
+                            <td><div style="font-size:11px; color:#64748b">${o.address || 'N/A'}, ${o.city || ''}</div></td>
+                            <td class="fw-bold">${o.total}</td>
+                            <td><select class="form-select form-select-sm border-0 bg-light fw-bold" onchange="upOrder('${id}', this.value)">
+                                <option ${o.status==='Pending'?'selected':''}>Pending</option>
+                                <option ${o.status==='Shipped'?'selected':''}>Shipped</option>
+                                <option ${o.status==='EnRoute'?'selected':''}>EnRoute</option>
+                                <option ${o.status==='Delivered'?'selected':''}>Delivered</option>
+                            </select></td>
+                        </tr>`;
+                    });
+                    document.getElementById('dash-rev').innerText = "Rs. " + rev.toLocaleString();
+                    document.getElementById('dash-ord').innerText = ords;
+                    document.getElementById('dash-pend').innerText = pends;
+                    renderChart(cStats);
+                }
+            });
+
+            // Inventory
+            onValue(ref(db, 'products'), (snap) => {
+                const tbody = document.getElementById('product-tbody'); tbody.innerHTML = '';
+                if(snap.exists()){
+                    Object.entries(snap.val()).forEach(([id, p]) => {
+                        tbody.innerHTML += `<tr>
+                            <td><img src="${p.image}" class="p-img-table shadow-sm"></td>
+                            <td><b>${p.title}</b></td><td>Rs. ${p.price}</td><td>${p.category}</td>
+                            <td><i class="fa-solid fa-trash text-danger cursor-pointer" onclick="delP('${id}')"></i></td>
+                        </tr>`;
+                    });
+                    document.getElementById('st-prod').innerText = Object.keys(snap.val()).length;
+                    document.getElementById('dash-prod').innerText = Object.keys(snap.val()).length;
+                }
+            });
+
+            // Banners & Settings same as before but inside loadAdminData
+            onValue(ref(db, 'settings'), (snap) => {
+                const s = snap.val() || {};
+                document.getElementById('s-name').value = s.storeName || '';
+                document.getElementById('s-logo').value = s.logoUrl || '';
+                document.getElementById('s-wa').value = s.whatsapp || '';
+                document.getElementById('s-cur').value = s.currency || 'Rs.';
+                document.getElementById('s-fb').value = s.facebook || '';
+                document.getElementById('s-ig').value = s.instagram || '';
+                document.getElementById('s-ep').value = s.ep_number || '';
+                document.getElementById('s-jc').value = s.jc_number || '';
+            });
+
+            onValue(ref(db, 'settings/posters'), (snap) => {
+                const box = document.getElementById('banner-list-ui'); box.innerHTML = '';
+                if(snap.exists()) Object.entries(snap.val()).forEach(([id, b]) => {
+                    box.innerHTML += `<div class="col-md-3"><div class="banner-card shadow"><img src="${b.url}"><button class="btn-del-banner" onclick="delB('${id}')">×</button></div></div>`;
+                });
+            });
+
+            onValue(ref(db, 'users'), s => document.getElementById('dash-user').innerText = s.exists() ? Object.keys(s.val()).length : 0);
+        }
+
+        // Action Handlers
+        document.getElementById('pForm').onsubmit = (e) => {
+            e.preventDefault();
+            push(ref(db, 'products'), {
+                title: document.getElementById('p-t').value, category: document.getElementById('p-c').value,
+                price: document.getElementById('p-p').value, badge: document.getElementById('p-b').value,
+                image: document.getElementById('p-i').value
+            }).then(() => { kingToast("Product Published!"); e.target.reset(); showSec('inventory'); });
+        };
+
+        window.upOrder = (id, val) => update(ref(db, `orders/${id}`), { status: val }).then(() => kingToast("Status Updated"));
+        window.delP = (id) => confirm('Delete?') && remove(ref(db, `products/${id}`));
+        window.addBanner = () => {
+            const url = document.getElementById('b-url').value, txt = document.getElementById('b-txt').value;
+            if(url) push(ref(db, 'settings/posters'), { url, text: txt }).then(() => { document.getElementById('b-url').value=''; document.getElementById('b-txt').value=''; });
+        };
+        window.delB = (id) => remove(ref(db, `settings/posters/${id}`));
+
+        window.saveSettings = () => {
+            update(ref(db, 'settings'), {
+                storeName: document.getElementById('s-name').value,
+                logoUrl: document.getElementById('s-logo').value,
+                whatsapp: document.getElementById('s-wa').value,
+                currency: document.getElementById('s-cur').value,
+                facebook: document.getElementById('s-fb').value,
+                instagram: document.getElementById('s-ig').value,
+                ep_number: document.getElementById('s-ep').value,
+                jc_number: document.getElementById('s-jc').value
+            }).then(() => alert('Store Config Updated!'));
+        };
+
+        let myChart;
+        function renderChart(d) {
+            const ctx = document.getElementById('analysisChart').getContext('2d');
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Pending', 'Shipped', 'EnRoute', 'Delivered'],
+                    datasets: [{ label: 'Order Volume', data: [d.Pending, d.Shipped, d.EnRoute, d.Delivered], backgroundColor: ['#f59e0b','#3b82f6','#8b5cf6','#10b981'], borderRadius: 12 }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+    </script>
+</body>
+</html>

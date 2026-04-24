@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Club | MegaMart Plus Luxury</title>
+    
+    <!-- Premium Assets -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary: #00ff88; /* Electric Green (Zero Style) */
+            --gold: #FFD700;
+            --dark: #000000;
+            --glass: rgba(255, 255, 255, 0.03);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        .header-elite {
+            background: rgba(0,0,0,0.9);
+            padding: 20px 0;
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .logo-text {
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .logo-text span { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero-club {
+            padding: 100px 0;
+            text-align: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+        .hero-club h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .hero-club p {
+            font-size: 1.2rem;
+            opacity: 0.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Membership Cards --- */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .tier-card {
+            background: linear-gradient(145deg, #111, #050505);
+            border: 1px solid #222;
+            border-radius: 30px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .tier-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+        }
+        .tier-card.gold:hover {
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.1);
+        }
+        .tier-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .tier-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .tier-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+        .perk-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 40px;
+        }
+        .perk-list li {
+            padding: 10px 0;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .perk-list li i { color: var(--primary); }
+
+        .btn-join {
+            width: 100%;
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 800;
+            background: white;
+            color: black;
+            transition: 0.3s;
+        }
+        .btn-join:hover {
+            background: var(--primary);
+            color: black;
+            transform: scale(1.05);
+        }
+
+        /* --- Elite Perks Section --- */
+        .perks-section {
+            padding: 100px 0;
+            border-top: 1px solid #111;
+        }
+        .perk-box {
+            text-align: center;
+            padding: 30px;
+        }
+        .perk-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+        .perk-box h4 {
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .perk-box p {
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        /* --- Stylish Toast --- */
+        #eliteToast {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: black;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            z-index: 10000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #eliteToast.active { top: 40px; }
+
+        /* --- Footer --- */
+        footer {
+            background: #050505;
+            padding: 80px 0 40px;
+            border-top: 1px solid #111;
+        }
+
+        @media (max-width: 768px) {
+            .hero-club h1 { font-size: 2.5rem; }
+            .tier-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elite Toast -->
+    <div id="eliteToast">Elite Membership Activated!</div>
+
+    <!-- Header -->
+    <header class="header-elite">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="index.html" class="logo-text">MEGA<span>MART</span>+</a>
+            <div class="d-flex gap-4 align-items-center">
+                <a href="index.html" class="text-white text-decoration-none fw-700 small">STORE</a>
+                <i class="fa-solid fa-magnifying-glass cursor-pointer"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-club">
+        <div class="container animate__animated animate__fadeIn">
+            <h1>Elite Club</h1>
+            <p>Step into the circle of exclusivity. Earn points, unlock tiers, and experience luxury like never before.</p>
+        </div>
+    </section>
+
+    <!-- Membership Tiers -->
+    <section class="container mb-5">
+        <div class="tier-grid">
+            
+            <!-- Silver Tier -->
+            <div class="tier-card animate__animated animate__fadeInLeft">
+                <div class="tier-icon"><i class="fa-solid fa-shield-halved text-secondary"></i></div>
+                <div class="tier-name">SILVER</div>
+                <div class="tier-price">Free Entry</div>
+                <ul class="perk-list">
+                    <li><i class="fa-solid fa-check"></i> 5% Reward Points</li>
+                    <li><i class="fa-solid fa-check"></i> Monthly Coupons</li>
+                    <li><i class="fa-solid fa-check"></i> Member Only Sales</li>
+                    <li style="opacity: 0.2;"><i class="fa-solid fa-xmark"></i> Priority Shipping</li>
+                </ul>
+                <button class="btn-join" onclick="activateClub('Silver')">JOIN SILVER</button>
+            </div>
+
+            <!-- Gold Tier -->
+            <div class="tier-card gold animate__animated animate__fadeInUp">
+                <div class="tier-icon"><i class="fa-solid fa-crown" style="color: var(--gold);"></i></div>
+                <div class="tier-name" style="color: var(--gold);">GOLD</div>
+                <div class="tier-price" style="color: var(--gold);">10,000 Points Required</div>
+                <ul class="perk-list">
+                    <li><i class="fa-solid fa-check" style="color: var(--gold);"></i> 10% Reward Points</li>
+                    <li><i class="fa-solid fa-check" style="color: var(--gold);"></i> Free Standard Shipping</li>
+                    <li><i class="fa-solid fa-check" style="color: var(--gold);"></i> Birthday Special Gift</li>
+                    <li><i class="fa-solid fa-check" style="color: var(--gold);"></i> Early Access to Drops</li>
+                </ul>
+                <button class="btn-join" style="background: var(--gold);" onclick="activateClub('Gold')">JOIN GOLD</button>
+            </div>
+
+            <!-- Diamond Tier -->
+            <div class="tier-card animate__animated animate__fadeInRight">
+                <div class="tier-icon"><i class="fa-solid fa-gem text-info"></i></div>
+                <div class="tier-name">DIAMOND</div>
+                <div class="tier-price">Invite Only</div>
+                <ul class="perk-list">
+                    <li><i class="fa-solid fa-check"></i> 20% Reward Points</li>
+                    <li><i class="fa-solid fa-check"></i> Free Express Shipping</li>
+                    <li><i class="fa-solid fa-check"></i> Personal Concierge</li>
+                    <li><i class="fa-solid fa-check"></i> VIP Event Access</li>
+                </ul>
+                <button class="btn-join" onclick="activateClub('Diamond')">REQUEST ACCESS</button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Perks Section -->
+    <section class="perks-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-800">MEMBERSHIP PRIVILEGES</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="perk-box">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <h4>Priority Logistics</h4>
+                        <p>Your orders are processed first, ensuring the fastest delivery possible.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="perk-box">
+                        <i class="fa-solid fa-gift"></i>
+                        <h4>Curated Gifts</h4>
+                        <p>Exclusive MegaMart merchandise delivered to our Gold & Diamond members.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="perk-box">
+                        <i class="fa-solid fa-headset"></i>
+                        <h4>VIP Support</h4>
+                        <p>A dedicated support line available 24/7 for all your inquiries.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <h4 class="fw-800 mb-4">MEGA<span>MART</span>+</h4>
+            <div class="d-flex justify-content-center gap-4 mb-5">
+                <a href="#" class="text-white opacity-50"><i class="fa-brands fa-instagram fs-4"></i></a>
+                <a href="#" class="text-white opacity-50"><i class="fa-brands fa-facebook fs-4"></i></a>
+                <a href="#" class="text-white opacity-50"><i class="fa-brands fa-whatsapp fs-4"></i></a>
+            </div>
+            <p class="small opacity-30">© 2024 MegaMart Plus Elite Club. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function activateClub(tier) {
+            const toast = document.getElementById('eliteToast');
+            toast.innerText = tier + " Membership Activated!";
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>

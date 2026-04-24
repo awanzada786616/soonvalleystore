@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Releases | MegaMart Plus</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* --- Custom Navbar --- */
+        .navbar-mega {
+            background: var(--dark);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .logo-text {
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .logo-text span { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero-new {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-new h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .badge-new {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        /* --- Product Card Design --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding-bottom: 100px;
+        }
+
+        .mega-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .mega-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .img-container {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: 0.5s;
+        }
+        .mega-card:hover .img-container img {
+            transform: scale(1.1);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: white;
+            color: var(--dark);
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+
+        .card-body-mega {
+            padding: 25px;
+        }
+        .product-cat {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .product-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.8rem;
+        }
+        .price-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .price-new {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+        .btn-buy {
+            background: var(--dark);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-buy:hover {
+            background: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        /* --- Loading Spinner --- */
+        .loader-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-new h1 { font-size: 2.2rem; }
+            .product-grid { grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+            .mega-card { border-radius: 15px; }
+            .card-body-mega { padding: 15px; }
+            .price-new { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader-wrapper" id="loader">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <!-- Top Navbar -->
+    <nav class="navbar-mega">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="#" class="logo-text">MEGA<span>MART</span>+</a>
+            <div class="text-white">
+                <i class="fa-solid fa-bag-shopping fs-4"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-new">
+        <div class="container animate__animated animate__fadeIn">
+            <span class="badge-new">Just Arrived</span>
+            <h1>New Releases</h1>
+            <p class="opacity-75">Discover the latest premium additions to MegaMart Plus.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div id="new-releases-grid" class="product-grid">
+            <!-- Products will be injected here by JS -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h4 class="fw-800 mb-3">MEGAMART+</h4>
+            <p class="opacity-50 small">Experience the future of premium shopping.</p>
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <i class="fa-brands fa-instagram fs-4"></i>
+                <i class="fa-brands fa-facebook fs-4"></i>
+                <i class="fa-brands fa-whatsapp fs-4"></i>
+            </div>
+            <hr class="my-5 opacity-10">
+            <p class="small opacity-50">© 2024 MegaMart Plus. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0hUkox8iDVFXPsI0Rd4Ep4B-5uAjRXMI",
+            authDomain: "king-c2456.firebaseapp.com",
+            databaseURL: "https://king-c2456-default-rtdb.firebaseio.com",
+            projectId: "king-c2456",
+            storageBucket: "king-c2456.firebasestorage.app",
+            messagingSenderId: "946581270259",
+            appId: "1:946581270259:web:3184da55b7e04f76a21186"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Fetch Products
+        const productsRef = ref(db, 'products');
+        onValue(productsRef, (snapshot) => {
+            const data = snapshot.val();
+            const grid = document.getElementById('new-releases-grid');
+            const loader = document.getElementById('loader');
+            
+            if (data) {
+                // Convert object to array and reverse it for "Newest First"
+                const productList = Object.entries(data).reverse();
+                
+                grid.innerHTML = ''; // Clear grid
+
+                productList.forEach(([id, product]) => {
+                    const cardHTML = `
+                        <div class="mega-card animate__animated animate__fadeInUp">
+                            <div class="img-container">
+                                <span class="card-tag">NEW</span>
+                                <img src="${product.image}" alt="${product.title}">
+                            </div>
+                            <div class="card-body-mega">
+                                <div class="product-cat">${product.category || 'Premium'}</div>
+                                <h3 class="product-title">${product.title}</h3>
+                                <div class="price-box">
+                                    <span class="price-new">Rs. ${product.price}</span>
+                                    <button class="btn-buy" onclick="window.location.href='index.html'">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += cardHTML;
+                });
+            } else {
+                grid.innerHTML = '<div class="col-12 text-center py-5"><h3>No new releases found.</h3></div>';
+            }
+
+            // Hide Loader
+            loader.style.display = 'none';
+        });
+    </script>
+
+</body>
+</html>

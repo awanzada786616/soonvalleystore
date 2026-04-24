@@ -562,5 +562,37 @@
         };
 
     </script>
+    <!-- Widget HTML -->
+<div class="wa-card" id="waCard">
+    <div class="wa-header">
+        <div class="wa-close" onclick="toggleWa()"><i class="fa-solid fa-xmark"></i></div>
+        <h6>Best Store</h6>
+        <p>Typically replies in minutes</p>
+    </div>
+    <div class="wa-body">
+        <div class="wa-msg">Hi there! How can we help you BEST STORE ?</div>
+    </div>
+    <div class="wa-footer">
+        <a href="https://wa.me/923344845224?text=Hello%20best%20store%20support" target="_blank" class="wa-btn-send">
+            <i class="fa-brands fa-whatsapp"></i> Start Chat
+        </a>
+    </div>
+</div>
+
+<button class="wa-float-btn" onclick="toggleWa()">
+    <i class="fa-brands fa-whatsapp"></i> WhatsApp Us
+</button>
+
+<script>
+    function toggleWa() {
+        var card = document.getElementById('waCard');
+        if (card.style.display === 'flex') {
+            card.style.display = 'none';
+        } else {
+            card.style.display = 'flex';
+        }
+    }
+</script>
+<!-- WhatsApp Premium Widget End -->
 </body>
 </html>

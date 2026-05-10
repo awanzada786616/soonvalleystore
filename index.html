@@ -37,6 +37,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
+        .mobile-footer-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-top: 1px solid #eee;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    flex: 1;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.nav-item span {
+    font-family: Arial, sans-serif;
+}
+
+/* Cart badge styling */
+.cart-icon-wrapper {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #000;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+/* Screen size handle (sirf mobile par dikhane ke liye) */
+@media (min-width: 768px) {
+    .mobile-footer-nav {
+        display: none; /* Desktop par hide ho jaye ga */
+    }
+}
         #preloader {
     position: fixed;
     top: 0;
@@ -852,5 +908,34 @@
     }, 2000); // 2000ms = 2 seconds
 });
 </script>
+    <!-- Footer Navigation Bar -->
+<div class="mobile-footer-nav">
+    <a href="#home" class="nav-item">
+        <i class="fa fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="#search" class="nav-item">
+        <i class="fa fa-search"></i>
+        <span>Search</span>
+    </a>
+    <a href="#shop" class="nav-item">
+        <i class="fa fa-th-large"></i>
+        <span>Shop</span>
+    </a>
+    <a href="#cart" class="nav-item">
+        <div class="cart-icon-wrapper">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="cart-badge">0</span>
+        </div>
+        <span>Cart</span>
+    </a>
+    <a href="#account" class="nav-item">
+        <i class="fa fa-user-o"></i>
+        <span>Account</span>
+    </a>
+</div>
+
+<!-- Icons ke liye link (agar pehle se nahi hai to head mein dalen) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </body>
 </html>
